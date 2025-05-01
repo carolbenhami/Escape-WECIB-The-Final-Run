@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Textbook Portal</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #003366;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.search-bar {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.search-bar input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filters {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background-color: #003366;
+    color: white;
+}
+
+.books-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    min-height: 800px;
+}
+
+.book-card {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.book-cover {
+    width: 150px;
+    height: 200px;
+    background-color: #e0e0e0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #003366;
+    animation: spin 1s linear infinite;
+    margin: 50px auto;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.modal-button {
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.task-instruction {
+    background-color: #e0f7fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    text-align: center;
+    border-left: 5px solid #00bcd4;
+}
+
+.scroll-hint {
+    text-align: center;
+    padding: 15px;
+    margin: 15px 0;
+    font-size: 18px;
+    color: #003366;
+    font-weight: bold;
+    animation: bounce 2s infinite;
+    background-color: #fff3cd;
+    border-radius: 5px;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.quiz-button-container {
+    text-align: center;
+    margin: 30px 0;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+}
+
+.quiz-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.quiz-question h2 {
+    margin-bottom: 20px;
+}
+
+.quiz-options {
+    margin-bottom: 30px;
+}
+
+.quiz-option {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.quiz-option:hover {
+    background-color: #f5f5f5;
+}
+
+.quiz-result {
+    text-align: center;
+    padding: 20px;
+}
+
+.quiz-result.hidden {
+    display: none;
+}
+
+.maintenance-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.maintenance-content {
+    padding: 20px;
+}
+
+.maintenance-timer {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #d32f2f;
+}
+
+.email-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.email-field {
+    margin: 15px 0;
+}
+
+.email-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.email-field input, .email-field textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.angry-button {
+    padding: 10px 20px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px 0;
+    transition: background-color 0.2s;
+}
+
+.angry-button:hover {
+    background-color: #b71c1c;
+}
+
+.email-sent-container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.email-error {
+    padding: 20px;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+    background-color: #ffebee;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+<div id="game-container">
+<!-- Login Screen (will appear at the end) -->
+<div id="login-screen" class="hidden">
+    <div class="login-container">
+        <h2>Digital Textbook Portal</h2>
+        <p>Please sign in to continue</p>
+        <input type="text" class="login-input" placeholder="Username">
+        <input type="password" class="login-input" placeholder="Password">
+        <button class="login-button" id="login-button">Sign In</button>
+    </div>
+</div>
+
+<!-- Main Portal Screen -->
+<div id="portal-screen">
+    <header>
+        <h1>Digital Textbook Portal</h1>
+    </header>
+    
+    <div class="container">
+        <div class="task-instruction">
+            <h2>Assignment: Find and open the book titled "Computer Networking: A Complete Guide"</h2>
+            <p>Scroll down to see available books...</p>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Search for a textbook..." value="networking">
+            <button>Search</button>
+        </div>
+        
+        <div class="filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Computer Science</button>
+            <button class="filter-btn">Engineering</button>
+            <button class="filter-btn">Mathematics</button>
+        </div>
+        
+        <div id="scroll-hint" class="scroll-hint">
+            Scroll down to see available books...
+        </div>
+        
+        <div class="books-container" id="books-container">
+            <!-- Books will be added by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Textbook View Screen -->
+<div id="textbook-screen" class="hidden">
+    <header>
+        <h1>Computer Networking: A Complete Guide</h1>
+    </header>
+    
+    <div class="container">
+        <div class="textbook-view" id="textbook-content">
+            <h1>Computer Networking: A Complete Guide</h1>
+            <h2>Table of Contents</h2>
+            <ol>
+                <li>Introduction to Computer Networks</li>
+                <li>Network Architecture and Models</li>
+                <li>Physical Layer and Data Link Layer</li>
+                <li>Network Layer and IP Addressing</li>
+                <li>Transport Layer Protocols: TCP and UDP</li>
+                <li>Application Layer Protocols</li>
+                <li>Network Security</li>
+                <li>Wireless Networking</li>
+                <li>Cloud Computing and Networking</li>
+                <li>Future Trends in Computer Networks</li>
+            </ol>
+            
+            <h2>Chapter 1: Introduction to Computer Networks</h2>
+            <p>A computer network is a group of computers and devices interconnected by communication channels that allow sharing of resources and information. Networks may be classified according to a wide variety of characteristics such as the medium used to transport the data, communications protocol used, scale, topology, benefit, and organizational scope.</p>
+            
+            <h3>1.1 History of Computer Networks</h3>
+            <p>The earliest examples of computer networks were in the 1950s, but they were purpose-built for specific applications. The first wide-area computer network was developed by the United States Department of Defense in the 1960s, which led to the development of ARPANET and eventually to the Internet as we know it today.</p>
+            
+            <h3>1.2 Types of Computer Networks</h3>
+            <p>Computer networks can be classified based on their scale and geographical spread:</p>
+            <ul>
+                <li><strong>Personal Area Network (PAN)</strong>: A network for one person, typically within a range of 10 meters.</li>
+                <li><strong>Local Area Network (LAN)</strong>: A network that covers a small geographic area, like a home, office, or building.</li>
+                <li><strong>Metropolitan Area Network (MAN)</strong>: A network that connects LANs within a city or metropolitan area.</li>
+                <li><strong>Wide Area Network (WAN)</strong>: A network that spans a large geographic area, often connecting different cities or countries.</li>
+                <li><strong>Global Area Network (GAN)</strong>: A network that spans the entire globe, like the Internet.</li>
+            </ul>
+            
+            <div id="quiz-button-container" class="quiz-button-container">
+                <button id="start-quiz-button" class="modal-button">Take Chapter Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Quiz Screen -->
+<div id="quiz-screen" class="hidden">
+    <header>
+        <h1>Chapter 1 Quiz</h1>
+    </header>
+    
+    <div class="container">
+        <div class="quiz-container">
+            <div id="quiz-question-container" class="quiz-question">
+                <h2>Question: What does LAN stand for?</h2>
+                <div class="quiz-options">
+                    <div class="quiz-option">
+                        <input type="radio" name="lan-answer" id="option1" value="wrong1">
+                        <label for="option1">Limited Access Network</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="lan-answer" id="option2" value="correct">
+                        <label for="option2">Local Area Network</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="lan-answer" id="option3" value="wrong2">
+                        <label for="option3">Linked Array of Nodes</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="lan-answer" id="option4" value="wrong3">
+                        <label for="option4">Large Application Network</label>
+                    </div>
+                </div>
+                <button id="submit-quiz" class="modal-button">Submit Answer</button>
+            </div>
+            <div id="quiz-result" class="quiz-result hidden">
+                <h2 id="quiz-feedback"></h2>
+                <p id="quiz-correct-answer"></p>
+                <button id="continue-quiz" class="modal-button">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Maintenance Screen -->
+<div id="maintenance-screen" class="hidden">
+    <div class="maintenance-container">
+        <h1>🛠️ System Maintenance 🛠️</h1>
+        <div class="maintenance-content">
+            <h2>We're Sorry!</h2>
+            <p>The Digital Textbook Portal is currently undergoing scheduled maintenance.</p>
+            <p>We expect to be back online in approximately:</p>
+            <div class="maintenance-timer">72:34:21</div>
+            <p>We apologize for any inconvenience this may cause.</p>
+            <button id="send-email-button" class="angry-button">Send Feedback to Administrator</button>
+        </div>
+    </div>
+</div>
+
+<!-- Email Screen -->
+<div id="email-screen" class="hidden">
+    <div class="email-container">
+        <h2>Send Feedback to Administrator</h2>
+        <div class="email-form">
+            <div class="email-field">
+                <label>From:</label>
+                <input type="text" value="student@university.edu" readonly>
+            </div>
+            <div class="email-field">
+                <label>To:</label>
+                <input type="text" value="admin@digitaltextbookportal.edu" readonly>
+            </div>
+            <div class="email-field">
+                <label>Subject:</label>
+                <input type="text" value="URGENT: Issues with Digital Textbook Portal" readonly>
+            </div>
+            <div class="email-field">
+                <label>Message:</label>
+                <textarea id="email-message" rows="10">To whom it may concern,
+
+I am writing to express my extreme frustration with the Digital Textbook Portal. I have been trying to access the Computer Networking textbook for my assignment, but have encountered numerous issues:
+
+1. The book initially didn't appear in search results
+2. When I finally found it, I had to restart my computer to access it
+3. I then had to get a completely new computer
+4. The quiz incorrectly marked my answers
+5. And now the entire system is down for maintenance during midterms week!
+
+This is unacceptable. Please fix these issues immediately.
+
+Sincerely,
+A Very Frustrated Student</textarea>
+            </div>
+            <button id="send-email-submit" class="angry-button">Send Email</button>
+        </div>
+    </div>
+</div>
+
+<!-- Email Sent Screen -->
+<div id="email-sent-screen" class="hidden">
+    <div class="email-sent-container">
+        <h2>Email Status</h2>
+        <div class="email-error">
+            <h3>Error 503: Service Unavailable</h3>
+            <p>Your email could not be sent at this time.</p>
+            <p>Please try again in 72 hours when maintenance is complete.</p>
+            <button id="restart-game" class="modal-button">Return to Login</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Modals -->
+<div id="scroll-modal" class="modal">
+<div class="modal-content">
+    <h2 class="modal-title">Oh wait!</h2>
+    <p>You need to scroll down to see more books.</p>
+    <button class="modal-button" id="scroll-ok-button">OK, I'll scroll down</button>
+</div>
+</div>
+
+<div id="restart-modal" class="modal">
+<div class="modal-content">
+    <h2 class="modal-title">Error Loading Book</h2>
+    <img src="mr.cisco.png" alt="reaction" style="display: block; align-items: center; margin-left: auto; margin-right: auto;" id="reaction-image1" length="200" width="200">
+    <p>Please turn your computer off and on again to access this book.</p>
+    <button class="modal-button" id="restart-button">Turn Computer Off/On</button>
+</div>
+</div>
+
+<div id="new-computer-modal" class="modal">
+<div class="modal-content">
+    <h2 class="modal-title">System Incompatibility</h2>
+    <img src="mr.cisco_meme.jpg" alt="reaction" style="display: block; align-items: center; margin-left: auto; margin-right: auto;" id="reaction-image2" length="200" width="200">
+    <p>This textbook cannot be viewed on your current device. Please throw away your computer and get a new one.</p>
+    <button class="modal-button" id="new-computer-button">Get a New Computer</button>
+</div>
+</div>
+
+<div id="success-modal" class="modal">
+<div class="modal-content">
+    <h2 class="modal-title">Success!</h2>
+    <img src="webster.png" alt="spider" style="display: block; align-items: center; margin-left: auto; margin-right: auto;" id="spider-image" length="200" width="200">
+    <p>You found the textbook!</p>
+    <button class="modal-button" id="success-button">Open Book</button>
+</div>
+</div>
+
+<script>
+// Game state
+let gameState = {
+    scrolled: false,
+    restarted: false,
+    newComputer: false,
+    bookTried: false,
+    bookOpened: false
+};
+
+// DOM elements
+const booksContainer = document.getElementById('books-container');
+const scrollHint = document.getElementById('scroll-hint');
+const scrollModal = document.getElementById('scroll-modal');
+const restartModal = document.getElementById('restart-modal');
+const newComputerModal = document.getElementById('new-computer-modal');
+const scrollOkButton = document.getElementById('scroll-ok-button');
+const restartButton = document.getElementById('restart-button');
+const newComputerButton = document.getElementById('new-computer-button');
+const portalScreen = document.getElementById('portal-screen');
+const textbookScreen = document.getElementById('textbook-screen');
+const loginScreen = document.getElementById('login-screen');
+const loginButton = document.getElementById('login-button');
+
+// Create some dummy books
+function createDummyBooks() {
+    const bookTitles = [
+        "Database Systems: A Practical Approach",
+        "Artificial Intelligence: Modern Methods",
+        "Cloud Computing Essentials",
+        "Software Engineering Principles",
+        "Data Structures and Algorithms",
+        "Web Development for Beginners",
+        "Cybersecurity Fundamentals",
+        "Machine Learning Applications",
+        "Operating Systems Concepts"
+    ];
+    
+    // Clear any existing books
+    booksContainer.innerHTML = '';
+    
+    bookTitles.forEach(title => {
+        const bookCard = document.createElement('div');
+        bookCard.className = 'book-card';
+        
+        const bookCover = document.createElement('div');
+        bookCover.className = 'book-cover';
+        bookCover.textContent = title.split(':')[0];
+        
+        const bookTitle = document.createElement('h3');
+        bookTitle.textContent = title;
+        
+        bookCard.appendChild(bookCover);
+        bookCard.appendChild(bookTitle);
+        
+        booksContainer.appendChild(bookCard);
+    });
+}
+
+// Add the networking textbook
+function addNetworkingBook() {
+    const networkingBook = document.createElement('div');
+    networkingBook.className = 'book-card';
+    networkingBook.id = 'networking-book';
+    
+    const bookCover = document.createElement('div');
+    bookCover.className = 'book-cover';
+    bookCover.style.backgroundColor = '#003366';
+    bookCover.style.color = 'white';
+    bookCover.textContent = 'Computer Networking';
+    
+    const bookTitle = document.createElement('h3');
+    bookTitle.textContent = 'Computer Networking: A Complete Guide';
+    
+    networkingBook.appendChild(bookCover);
+    networkingBook.appendChild(bookTitle);
+    
+    networkingBook.addEventListener('click', attemptOpenBook);
+    
+    booksContainer.appendChild(networkingBook);
+}
+
+// Attempt to open the book
+function attemptOpenBook() {
+    if (!gameState.bookTried) {
+        gameState.bookTried = true;
+        showModal(restartModal);
+    } else if (!gameState.restarted) {
+        showModal(restartModal);
+    } else if (!gameState.newComputer) {
+        showModal(newComputerModal);
+    } else {
+        // Success! Show success modal with spider
+        gameState.bookOpened = true;
+        showModal(document.getElementById('success-modal'));
+    }
+}
+
+// Show a modal
+function showModal(modal) {
+    modal.classList.add('active');
+}
+
+// Hide a modal
+function hideModal(modal) {
+    modal.classList.remove('active');
+}
+
+// Prepare reaction images
+function prepareImages() {
+    // We would normally set the src attributes to the actual images
+    // But for this demo, we're displaying placeholder image elements
+    document.getElementById('reaction-image1').style.display = 'block';
+    document.getElementById('reaction-image2').style.display = 'block';
+    document.getElementById('spider-image').style.display = 'block';
+}
+
+// Initialize the game
+function initGame() {
+    // Start with an empty books container
+    booksContainer.innerHTML = '';
+    prepareImages();
+    
+    // Scroll hint is visible from the start
+    
+    // Detect scrolling
+    window.addEventListener('scroll', () => {
+        if (!gameState.scrolled && window.scrollY > 100) {
+            gameState.scrolled = true;
+            scrollHint.style.display = 'none';
+            // Add both dummy books and the networking book when scrolled
+            createDummyBooks();
+            addNetworkingBook();
+        }
+    });
+    
+    // Button events
+    scrollOkButton.addEventListener('click', () => {
+        hideModal(scrollModal);
+    });
+    
+    restartButton.addEventListener('click', () => {
+        hideModal(restartModal);
+        gameState.restarted = true;
+        
+        // Simulate computer restarting
+        document.body.style.opacity = '0.1';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 2000);
+    });
+    
+    newComputerButton.addEventListener('click', () => {
+        hideModal(newComputerModal);
+        gameState.newComputer = true;
+        
+        // Simulate getting a new computer
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 2000);
+    });
+    
+    const successButton = document.getElementById('success-button');
+    if (successButton) {
+        successButton.addEventListener('click', () => {
+            // Make sure this exists inside successButton handler:
+        const quizScreen = document.getElementById('quiz-screen');
+        const startQuizButton = document.getElementById('start-quiz-button');
+
+        if (startQuizButton) {
+            startQuizButton.addEventListener('click', () => {
+                textbookScreen.classList.add('hidden');
+                quizScreen.classList.remove('hidden');
+                gameState.quizStarted = true;
+            });
+        }
+
+            hideModal(document.getElementById('success-modal'));
+            // Show the textbook
+            portalScreen.classList.add('hidden');
+            textbookScreen.classList.remove('hidden');
+            
+            // Set up quiz button
+            document.getElementById('start-quiz-button').addEventListener('click', () => {
+                textbookScreen.classList.add('hidden');
+                quizScreen.classList.remove('hidden');
+                gameState.quizStarted = true;
+            });
+            
+            // Set up quiz submission
+        const submitQuizBtn = document.getElementById('submit-quiz');
+        if (submitQuizBtn) {
+            submitQuizBtn.addEventListener('click', () => {
+                const selected = document.querySelector('input[name="lan-answer"]:checked');
+                const resultContainer = document.getElementById('quiz-result');
+                const feedback = document.getElementById('quiz-feedback');
+                const correctAnswer = document.getElementById('quiz-correct-answer');
+                const questionContainer = document.getElementById('quiz-question-container');
+    
+                if (!selected) {
+                    alert("Please select an answer before submitting.");
+                    return;
+                }
+    
+                questionContainer.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+    
+                if (selected.value === "correct") {
+                    feedback.textContent = "Incorrect!";
+                    correctAnswer.textContent = "Incorrect. You selected: 'Local Area Network'. The correct answer is 'Local Area Network'.";
+                } else {
+                    feedback.textContent = "Incorrect!";
+                    correctAnswer.textContent = "The correct answer is 'Local Area Network'.";
+                }
+    
+                gameState.quizAttempts++;
+            });
+
+            const continueQuizBtn = document.getElementById('continue-quiz');
+            if (continueQuizBtn) {
+                continueQuizBtn.addEventListener('click', () => {
+                    window.alert("The website is currently under maintenance. Please try again later.");
+                    // Reload the page
+                    window.location.reload();
+                });
+            }
+        }
+    });
+}
+    
+    loginButton.addEventListener('click', () => {
+        gameState.loggedInCount++;
+        
+        // Restart the game or show maintenance screen
+        loginScreen.classList.add('hidden');
+        
+        if (gameState.loggedInCount >= 2) {
+            // Show maintenance screen on second login after quiz
+            maintenanceScreen.classList.remove('hidden');
+        } else {
+            // Regular login flow
+            portalScreen.classList.remove('hidden');
+            gameState.scrolled = false;
+            gameState.restarted = false;
+            gameState.newComputer = false;
+            gameState.bookTried = false;
+            gameState.bookOpened = false;
+            
+            window.scrollTo(0, 0);
+            // Start with empty books container
+            booksContainer.innerHTML = '';
+            
+            // Scroll hint is always visible
+            scrollHint.style.display = 'block';
+        }
+    });
+}
+
+// Start the game
+window.onload = initGame;
+</script>
+</body>
+</html>
