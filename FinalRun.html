@@ -1028,9 +1028,9 @@
             },{},
             {
                 speaker: "Mr. McQueen",
-                text: "Alright, Have a good day everyone!",
+                text: "Have a good day everyone and I'll see you all at graduation!",
                 scene: "mcqueen",
-                choices: [{ text: "[leave classroom]" }]
+                choices: [{ text: "[go to graduation]" }]
             },];
             
 
@@ -1101,8 +1101,8 @@
                                 if (choice.openPopup) {
                                     const url = choice.popupUrl || 'online_book.html';
                                     window.open(url, 'PopupWindow', 'width=800,height=600');
-                                } else if (choice.text === "[leave classroom]") {
-                                    window.location.href = "EscapeWECIBFinalRun.html"; // Redirect to your desired HTML page
+                                } else if (choice.text === "[go to graduation]") {
+                                    window.location.href = "graduation/graduation.html"; 
                                     return;
                                 }
                                 if (typeof choice.nextIndex === 'number') {
