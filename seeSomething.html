@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>See Something, Say Something - Sandy Hook Promise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f7f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 90%;
+            border-top: 5px solid #75b959;
+        }
+        h1 {
+            color: #0e8246;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 200px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cde2cd;
+            border-radius: 5px;
+            background-color: #f9fcf9;
+        }
+        button {
+            background-color: #0e8246;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #75b959;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="logo">
+            <img src="images/saySomething.webp" alt="Sandy Hook Promise Logo">
+        </div>
+        <h1>Say Something</h1>
+        
+        <form id="reportForm">
+            <div class="question">
+                <label for="dangerQuestion">Are you a danger to yourself or others?</label>
+                <select id="dangerQuestion" required>
+                    <option value="">-- Please select --</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                    <option value="unsure">Not sure</option>
+                </select>
+            </div>
+            
+            <div class="question">
+                <label for="talkQuestion">Do you need to talk to someone?</label>
+                <select id="talkQuestion" required>
+                    <option value="">-- Please select --</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            
+            <div class="question">
+                <label for="reportQuestion">Do you want to report someone?</label>
+                <select id="reportQuestion" required>
+                    <option value="">-- Please select --</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Here you would typically send the form data to a server
+            // For this example, we'll just close the window as requested
+            
+            // You could also add a brief "thank you" message before closing
+            alert("Thank you saying something. We will be in contact.");
+            
+            // Close the window
+            window.close();
+        });
+    </script>
+</body>
+</html>

@@ -27,6 +27,7 @@
         padding-top: 40%;
         width: 100%;
         height: 400px;
+        
     }
 
     #scene img {
@@ -39,11 +40,20 @@
         display: none; 
     }
 
+    #warningVideo{
+        position: absolute;
+        top: -42.2%;
+        left: 40%;
+        width: 20%;
+        height: 100%;
+        display: none; 
+    }
+
     .uidialogue {
         width: 100%;
         max-width: 800px;
         position: relative;
-        top: -100px;
+        top: 50px;
     }
 
     #dialogueContainer {
@@ -56,13 +66,14 @@
 
     #characterPortrait {
         position: absolute;
-        top: 100%;
-        left: 83.5%;
+        top: 480%;
+        left: 82.5%;
         transform: translate(-50%, -50%);
         width: 100px;
         height: 100px;
+        max-width: 75.5px;
+        max-height: 80px;
         z-index: 3;
-        border-radius: 50%;
         object-fit: cover;
         display: none;
     }
@@ -73,7 +84,7 @@
         margin-bottom: 10px;
         z-index: 2;
         position: absolute;
-        top: 237.5%;
+        top: 612.5%;
         left: 82.5%;
         transform: translate(-50%, -50%);
         max-width: 80%;
@@ -85,6 +96,7 @@
         line-height: 1.5;
         position: absolute;
         top: -40%;
+        top: 342.5%;
         left: 5%;
         max-width: 70%;
         text-align: left;
@@ -99,6 +111,8 @@
         flex-direction: column;
         gap: 6px;
         left: 5%;
+        top: 435%;
+
     }
 
     .choice-btn {
@@ -135,7 +149,9 @@
             <img id="hallway" src="scene/hallway.png">
             <img id="mcqueen" src="scene/mcqueen.png">
             <img id="originOfLife" src="images/originOfLife.png">
-
+            <video id="warningVideo" width="100%" controls style="display:none">
+                <source src="images/warningSigns.mp4" type="video/mp4">
+            </video>  
         </div>
         <img class="uidialogue" id="uidialogue" src="images/gui.png">
         <div id="dialogueContainer">
@@ -156,6 +172,7 @@
         "Ms. Bee": "character/msBee.png",
         "Ms. Kween": "character/msKween.png",
         "Mr. McQueen": "character/mrmcqueen.png",
+        "Mr. McQueen!": "character/mrMcqueencat.jpg",
         "Unnamed Teacher": "character/ut.png",
         "Unnamed Student 1": "character/us1.png",
         "Unnamed Student 2": "character/us2.png",
@@ -164,16 +181,13 @@
         "Unnamed Student 5": "character/us5.png",
         "Unnamed Student 6": "character/us6.png",
         "Unnamed Student 7": "character/us7.png",
-        "Unnamed Student 8": "character/us8.png",
-        "Unnamed Student 9": "character/us9.png",
-        "Unnamed Student 10": "character/us10.png",
-        "Unnamed Student 11": "character/us11.png",
-        "Unnamed Student 12": "character/us12.png",
-        "Unnamed Student 13": "character/us13.png",
+        "Unnamed Student 8": "graduation/marc.png",
+        "Unnamed Student 9": "graduation/dillon.png",
+        "Unnamed Student 10": "graduation/daniel.png",
+        "Unnamed Student 11": "graduation/yunus.png",
+        "Unnamed Student 12": "graduation/nuno.png",
+        "Unnamed Student 13": "graduation/abram.png",
         "Unnamed Student 14": "character/us14.png",
-        "Unnamed Student 15": "character/us15.png",
-
-
         };
     
     const dialogue = [
@@ -206,7 +220,7 @@
                 text: "Do you want to see my project..? its important.",
                 scene: "bee",
                 choices: [
-                    { text: "Uh... okay?", nextIndex: 92 }, // 7
+                    { text: "Uh... okay?", nextIndex: 138 }, // 7
                     { text: "[pretend not to hear and look at your phone]", nextIndex: 5 },
                 ]
             },
@@ -429,7 +443,7 @@
             {
                 speaker: "You",
                 text: "[thinking] We didn't even get to hear the speach.",
-                scene: "vending",
+                scene: "kween",
                 choices: []
             },
             {
@@ -481,7 +495,7 @@
                 scene: "vending",
                 choices: [
                     { text: "Maybe grab a few? ", nextIndex: 60 },
-                    { text: "We could get in serious trouble.", nextIndex: 53 },
+                    { text: "We could get in serious trouble.", nextIndex: 54 },
                 ]
             },{},
             {
@@ -498,19 +512,19 @@
             },
             {
                 speaker: "Unnamed Student 4",
-                text: "I'm grabbing two of the large cookies. They never restock those!",
+                text: "I'm grabbing two of the large cookies. They never <br>restock those!",
                 scene: "vending",
                 choices: []
             },
             {
                 speaker: "Unnamed Student 6",
-                text: "Guys Hurry up! I can hear someone coming up the stairs!",
+                text: "Guys hurry up! I can hear someone coming up the stairs.",
                 scene: "vending",
                 choices: []
             },
             {
                 speaker: "Unnamed Student 7",
-                text: "Crap. Let's go",
+                text: "Crap. Let's go!",
                 scene: "vending",
                 choices: [
                     { text: "[follow Unnamed Students to staircase]", nextIndex: 64 }
@@ -695,7 +709,7 @@
             // Staff Break Room
             {
                 speaker: "none",
-                text: "After a few minutes, Unnamed Students leave the break room<br>with a few coffee mugs and protein drinks",
+                text: "After a few minutes, Unnamed Students leave the break room<br>with a few coffee mugs and protein drinks.",
                 scene: "hallway",
                 choices: []
             },
@@ -713,7 +727,7 @@
             },
             {
                 speaker: "Unnamed Student 5",
-                text: "We should probably get to class now, I saw<br><strong>Mr.McQueen</strong> come in.",
+                text: "We should probably get to class now, I saw<strong> The GOAT<br>Mr. McQueen</strong> come in.",
                 scene: "hallway",
                 choices: []
             },
@@ -722,26 +736,85 @@
                 text: "He's here? Let's go!",
                 scene: "hallway",
                 choices: [
-                    { text: "[follow Unnamed Students to computer room]", nextIndex: 85}
-                ]},
+                    { text: "[follow Unnamed Students to computer room]", nextIndex: 98}
+                ]},{},
             
             // Scene 5: MR. MCQUEEN'S NOS 110 NETWORKING CLASS
             {
-                speaker: "none",
-                text: "[Classroom, player sits down with stolen coffee mug]",
-                scene: "mcqueen",
-                choices: [
-                    { text: "Continue", nextIndex: 85 }
-                ]            },
-            {
                 speaker: "Mr. McQueen",
-                text: "[monotone] Alright everyone, please open your online textbooks to Chapter 7: WiFi Cable Attributes.",
+                text: "Good afternoon class. How was everyone's weekend?",
                 scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Unnamed Student 4",
-                text: "[raises hand] Sir, I can't access the textbook.",
+                speaker: "Unnamed Student 9",
+                text: "<strong>Too short!</strong>",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "That's right!<br>[sniffs] Do you guys smell that? ",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Unnamed Student 10",
+                text: "Smell what?",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen!",
+                text: "It smells like coffee...",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen!",
+                text: "[glances up] <strong>Unnamed Student 11</strong>, Is that coffee?",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Unnamed Student 11",
+                text: "Yeah.",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen!",
+                text: "Where did get that from?",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Unnamed Student 11",
+                text: "The staff break room...",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "[laughs] Nice! Get some for me next time.",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Unnamed Student 11",
+                text: "[nods head nonchalantly] Okay.",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "Alright everyone, please open your online textbooks<br>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀to Chapter 7: WiFi Cable Attributes.",
+                scene: "mcqueen",
+                choices: [{ text: "[login to Black Board]", nextIndex: 111, openPopup: true }]
+            },{},
+            {
+                speaker: "Unnamed Student 8",
+                text: "[raises hand] Uh Mr.McQueen, I can't access the textbook.",
                 scene: "mcqueen",
                 choices: []
             },
@@ -752,110 +825,110 @@
                 choices: []
             },
             {
-                speaker: "Unnamed Student 6",
-                text: "The website is down.",
-                scene: "mcqueen",
-                choices: []
-            },
-            {
                 speaker: "Mr. McQueen",
-                text: "[sighs] Not again. [types email] I'll contact the admin.",
+                text: "[sighs] I'll contact <strong>IT</strong>.",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[One hour later]",
+                text: "[one hour later]",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Mr. McQueen",
-                text: "[reading email] \"Most likely they do not scroll down the page, after clicking the carrot.\" What carrot? There's no carrot.",
+                text: "[reading email] \"Most likely they do not scroll down the page, after clicking the <\".",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "So If you so not see the textbook, you need to <strong>scroll down</strong>...<br>\"Then you need to <strong>turn the computer off/on</strong>, access it again,<br><strong>get a new computer</strong>, and then you can access the textbook.\" ",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Unnamed Student 4",
-                text: "[confused] Carrot? Like the vegetable?",
+                text: "...What?",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Mr. McQueen",
-                text: "[defeated] They mean the caret. The little arrow. [sighs] Never mind, I'll just project the lesson.",
+                text: "[laughs] Exactly!",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[Mr. McQueen plays video about WiFi cables. Suddenly, part of ceiling falls]",
+                text: "[metal falling] <strong>CLANG</strong>",
                 scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Unnamed Student 4",
-                text: "[dodging] WHAT THE—",
+                speaker: "Unnamed Student 12",
+                text: "[dodging] <strong>OH WHAT THE—</strong>",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Mr. McQueen",
-                text: "[calmly] Is everyone okay? No injuries?",
+                text: "Are you okay, Unnamed Student 12?",
                 scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Unnamed Student 4",
-                text: "[dusting off] Yeah, I'm fine. Just startled.",
+                speaker: "Unnamed Student 12",
+                text: "Yeah, I'm fine. Part of the ceiling almost just fell on me!",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Mr. McQueen",
-                text: "[typing on phone] I need to notify the liaison that the ceiling just fell.",
+                text: "[laughs] I'll to notify Mr. Unnamed Liaison.",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[Moments later, announcement over PA system]",
+                text: "A few moments later...",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "\"PURPLE FOLDER IN ROOM 307. REPEAT: PURPLE FOLDER IN ROOM 307.\"",
+                text: "[from the hallways] <strong>\"PURPLE FOLDER IN ROOM 205.<br>REPEAT: PURPLE FOLDER IN ROOM 205.\"</strong>",
+                scene: "mcqueen",
+                choices: []
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "What is going on?! We're in the middle of class.",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[Three staff members burst through door]",
+                text: "Unnamed Staff Members pear through the window.",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Unnamed Teacher",
-                text: "[panicked] Where's the injured student?! Do we need to call an ambulance?!",
+                text: "[panicked] Where's the injured student?! Do we need<br>to call an ambulance?!",
                 scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "none",
-                text: "[holding first aid kit] Is there blood?! How many fingers am I holding up?!",
-                scene: "mcqueen",
-                choices: []
-            },
-            {
-                speaker: "Unnamed Student 4",
-                text: "[confused] I'm fine? The ceiling just missed me.",
+                speaker: "Unnamed Student 12",
+                text: "[confused] uh I'm fine? The ceiling just missed me...",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Unnamed Teacher",
-                text: "[disappointed] So... no emergency?",
+                text: "...So there's no emergency?",
                 scene: "mcqueen",
                 choices: []
             },
@@ -867,123 +940,99 @@
             },
             {
                 speaker: "Unnamed Teacher",
-                text: "[relieved] Oh! Well, that's Facilities' problem. Have a nice day!",
+                text: "[relieved] Oh Thank God! Well, that's Facilities' problem.<br>Have a nice day!",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[Staff members leave]",
+                text: "The Unnamed Staff Members leave.",
                 scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "Mr. McQueen",
-                text: "[turning back to class] As I was saying... WiFi cables come in many varieties...",
+                text: "[shakes head] <strong>Oh my gosh...</strong> Lets just move onto CSC 115.",
                 scene: "mcqueen",
                 choices: []
             },
             
             // Scene 6: CTI 110 PYTHON PROGRAMMING CLASS
+
             {
-                speaker: "Professor",
-                text: "[frustrated] Welcome to CTI 110. I should mention that I only got access to this class materials TWO WEEKS before the semester started, even though I requested them in June.",
-                scene: "bee", // Using bee scene as placeholder
+                speaker: "Mr. McQueen",
+                text: "Hello again and Welcome to Computing Fundamentals, ",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Professor",
-                text: "So, we'll be doing the Trish Swap Shop project all year. Yes, all year. One project. Exciting, isn't it?",
-                scene: "bee",
+                speaker: "Mr. McQueen",
+                text: "It's ironic because this is at least the fourth Computer Science<br> class for most of you. but apparently your school also doesn't think it's fundamental enough...",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Unnamed Student 4",
-                text: "[raises hand] Is that the only project we'll do?",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "Professor",
-                text: "[sarcastic smile] Unless you'd prefer interpretive dance to demonstrate variables? Yes, it's the only project. The good news is our midterm will be in two parts!",
-                scene: "bee",
+                speaker: "Mr. McQueen",
+                text: "because they're taking class time for me to show you some<br>video about recognizing the warning signs. So... that's<br> happening today, I'll start it now.",
+                scene: "mcqueen",
                 choices: []
             },
             {
                 speaker: "none",
-                text: "[End of semester]",
-                scene: "bee",
+                text: "...",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Professor",
-                text: "[evil grin] Surprise! There's actually a Part 3 to the midterm that I never mentioned. Enjoy!",
-                scene: "bee",
+                speaker: "Unnamed Student 3",
+                text: "[stifles laugh] Is this for real?",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "none",
-                text: "Spring Semester - Senior Year",
-                scene: "bee",
+                speaker: "Mr. McQueen",
+                text: "[pauses video] Guys...",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Professor",
-                text: "[apologetic] Welcome to Computing Fundamentals, which ironically is not fundamental at all since this is at least the fourth CS class for most of you. The curriculum is... what it is.",
-                scene: "bee",
+                speaker: "Unnamed Student 13",
+                text: "[whispering] Why is the acting so bad, it's worse than<br>Dhar Man.",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Professor",
-                text: "[checking watch] Also, apparently our school doesn't think \"fundamentals\" are that fundamental because they're taking class time for me to show you a \"See Something, Say Something\" Sandy Hook video. So... that's happening today.",
-                scene: "bee",
+                speaker: "Unnamed Student 7",
+                text: "This is actually so funny. I'm going to post a gun<br>on my story—",
+                scene: "mcqueen",
+                choices: []
+
+            },
+            {
+                speaker: "Mr. McQueen",
+                text: "LA LA LA. LA. GUYS!",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "none",
-                text: "[Woman enters classroom]",
-                scene: "bee",
+                speaker: "Mr. McQueen",
+                text: "Oh my gosh. Are you trying to get me fired?<br>PLAUSABLE DENIABILITY!!",
+                scene: "mcqueen",
                 choices: []
             },
             {
-                speaker: "Safety Coordinator",
-                text: "[somber] Good morning, students. Before we watch this very important safety video, I want to talk about recognizing warning signs in your peers.",
-                scene: "bee",
-                choices: []
-            },
+                speaker: "Mr. McQueen",
+                text: "Anyways, please fill out these forms honestly.",
+                scene: "mcqueen",
+                choices: [{ text: "[open form]", nextIndex: 148, openPopup: true, popupUrl: "seeSomething.html" }]
+            },{},
             {
-                speaker: "none",
-                text: "[Video plays, shows obviously exaggerated \"warning signs\" like student drawing weapons, making threats]",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "Unnamed Student 1",
-                text: "[stifles laugh]",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "Unnamed Student 2",
-                text: "[whispers] Is this for real?",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "Safety Coordinator",
-                text: "[pauses video] This is NOT FUNNY. This is about LIVES.",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "none",
-                text: "[Video continues, more students struggling not to laugh]",
-                scene: "bee",
-                choices: []
-            },
-            {
-                speaker: "Safety Coordinator",
-                text: "[after video ends] Now, I'm passing out these forms. Please fill them out honestly."}];
+                speaker: "Mr. McQueen",
+                text: "Alright, Have a good day everyone!",
+                scene: "mcqueen",
+                choices: [{ text: "[leave classroom]" }]
+            },];
+            
 
                 let currentDialogueIndex = 0;
                 let clickEventActive = false;
@@ -1049,9 +1098,18 @@
                                 choiceButton.className = 'choice-btn';
                                 choiceButton.textContent = choice.text;
                                 choiceButton.addEventListener('click', () => {
+                                if (choice.openPopup) {
+                                    const url = choice.popupUrl || 'online_book.html';
+                                    window.open(url, 'PopupWindow', 'width=800,height=600');
+                                } else if (choice.text === "[leave classroom]") {
+                                    window.location.href = "EscapeWECIBFinalRun.html"; // Redirect to your desired HTML page
+                                    return;
+                                }
+                                if (typeof choice.nextIndex === 'number') {
                                     currentDialogueIndex = choice.nextIndex;
                                     displayDialogue();
-                                });
+                                }
+                            });
                                 choicesElement.appendChild(choiceButton);
                             });
                         }, 1050); // 1.05-second delay before showing choices
@@ -1063,7 +1121,21 @@
                             document.addEventListener('click', advanceDialogue, { once: true });
                         }
                     }
+
+                    // Handle special case: show and autoplay video at index 138
+                    const warningVideo = document.getElementById('warningVideo');
+                    if (currentDialogueIndex == 139 ) {
+                        warningVideo.style.display = 'block';
+                        warningVideo.currentTime = 120; // Start at 2 minutes (120 seconds)
+                        warningVideo.play();
+                    } else {
+                        warningVideo.pause();
+                        warningVideo.style.display = 'none';
+                    }
+
                 }
+
+                
 
                 // Function to advance to the next dialogue if there are no choices
                 function advanceDialogue() {
