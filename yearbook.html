@@ -205,8 +205,7 @@
         const loadingElement = document.getElementById('loading');
         const defaultMessage = document.getElementById('default-message');
         
-        // PDF URL - Replace with your actual PDF path
-        const pdfUrl = 'document.pdf';
+
         
         // Function to render a page
         async function renderPage(pageNum) {
@@ -275,7 +274,7 @@
             
             try {
                 // Load PDF document from URL
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                const loadingTask = pdfjsLib.getDocument('document.pdf');
                 currentPDF = await loadingTask.promise;
                 
                 // Get total pages
@@ -355,4 +354,3 @@
     </script>
 </body>
 </html>
-
